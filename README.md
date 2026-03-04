@@ -1,7 +1,6 @@
 # Simple HTTP File Server
 
-Простой API сервер для управления видео-контентом.
-
+API-сервер для управления видео-контентом (загрузка Instagram Reels через yt-dlp).
 
 ## Требования
 
@@ -10,39 +9,32 @@
 - ffmpeg
 - cookies.txt (для Instagram)
 
-## Установка и сборка
+## Быстрый старт
 
 ```bash
-./build.sh
+cp .env.example .env
+# отредактировать .env
+
+go run cmd/server/main.go
 ```
-
-## Запуск
-
-### Локально
-
-```bash
-./server
-```
-
-### Docker
-
-```bash
-docker compose up -d
-```
-
-Перед запуском создайте файл `cookies.txt` с cookies от Instagram.
 
 ## Конфигурация
 
-Переменные окружения:
+Переменные окружения (`.env` или системные):
 
-| Переменная   | Описание                      | По умолчанию |
-|--------------|-------------------------------|--------------|
-| SERVER_PORT  | Порт HTTP сервера             | 8080         |
-| CONTENT_DIR  | Директория для хранения видео | ./content    |
+| Переменная    | Описание                                  | По умолчанию |
+|---------------|-------------------------------------------|--------------|
+| SERVER_PORT   | Порт HTTP сервера                         | 8080         |
+| CONTENT_DIR   | Директория для хранения видео             | ./content    |
+| TLS_CERT_FILE | Путь к TLS-сертификату (опционально)      |              |
+| TLS_KEY_FILE  | Путь к TLS-ключу (опционально)            |              |
 
-Пример:
+## API
 
-```bash
-SERVER_PORT=3000 CONTENT_DIR=/data/videos go run cmd/server/main.go
-```
+| Метод  | Путь                              | Описание                  |
+|--------|-----------------------------------|---------------------------|
+| POST   | /api/reel/{shortcode}             | Скачать рилс              |
+| GET    | /api/reel/{shortcode}/video.mp4       | Получить сам рилс         |
+| GET    | /api/reel/{shortcode}/description | Получить описание рилса   |
+| DELETE | /api/reel/{shortcode}             | Удалить рилс              |
+| GET    | /health                           | Health check              |
